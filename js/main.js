@@ -5,8 +5,8 @@ const vue = {
     return {
       searchText: '',
       selectedColorHex: '#000000',
-      isVisibleControlArea: true,
-      isVisibleEditor: true,
+      isVisibleControlArea: false,
+      isVisibleEditor: false,
       config: {
         colorExpression: 'palette',  // 'palette'(fallback to color) | 'color' | 'colorf' | 'hex' | 'web'
         withAlpha: false,

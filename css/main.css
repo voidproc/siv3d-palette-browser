@@ -105,3 +105,9 @@ body {
   padding-top: 1.0rem;
   padding-bottom: 1.0rem;
 }
+@media (max-width:767px) {
+  .section-custom {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
