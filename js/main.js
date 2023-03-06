@@ -9,6 +9,7 @@ const vue = {
       isVisibleEditor: false,
       config: {
         colorExpression: 'palette',  // 'palette'(fallback to color) | 'color' | 'colorf' | 'hex' | 'web'
+        precision: 1,
         withAlpha: false,
       },
       palette: [ 
@@ -252,7 +253,8 @@ const vue = {
           {
             const gl = color.gl();
             const alphaText = this.config.withAlpha ? ', 1.0' : '';
-            return `ColorF{ ${gl[0].toFixed(4)}, ${gl[1].toFixed(4)}, ${gl[2].toFixed(4)}${alphaText} }`;
+            const precision = this.config.precision;
+            return `ColorF{ ${gl[0].toFixed(precision)}, ${gl[1].toFixed(precision)}, ${gl[2].toFixed(precision)}${alphaText} }`;
           }
         case 'hex':
           if (this.config.withAlpha) {

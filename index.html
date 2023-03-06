@@ -57,6 +57,19 @@
             </div>
 
             <div class="block">
+              <div class="field has-addons">
+                <div class="control">
+                  <a class="button is-static">
+                    Precision
+                  </a>
+                </div>
+                <div class="control">
+                  <input class="input" type="number" min="1" max="6" title="'ColorF'における小数点以下の桁数 (1～)&#13;&#10;※桁数を小さく設定することにより、実際の色との差異が大きくなるおそれがあります." placeholder="小数点以下の桁数" v-model="config.precision">
+                </div>
+              </div>
+            </div>
+
+            <div class="block">
               <div class="control">
                 <label class="checkbox">
                   <input type="checkbox" v-model="config.withAlpha">
