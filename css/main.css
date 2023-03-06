@@ -82,7 +82,11 @@ body {
   font-size: 85%;
   cursor: pointer;
 }
-
+@media (max-width:767px) {
+  .color-panel {
+    font-size: 70%;
+  }
+}
 .color-panel-clicked {
   animation-duration: 0.2s;
   animation-name: color-panel-clicked;
