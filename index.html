@@ -110,7 +110,7 @@
                         </a>
                       </div>
                       <div class="control">
-                        <input class="input is-small" type="text" :value="chroma(selectedColorHex).rgb()[0]" @input="onChangeR">
+                        <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[0]" @input="onChangeR">
                       </div>
                     </div>
                   </div>
@@ -126,7 +126,7 @@
                         </a>
                       </div>
                       <div class="control">
-                        <input class="input is-small" type="text" :value="chroma(selectedColorHex).rgb()[1]" @input="onChangeG">
+                        <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[1]" @input="onChangeG">
                       </div>
                     </div>
                   </div>
@@ -142,7 +142,7 @@
                         </a>
                       </div>
                       <div class="control">
-                        <input class="input is-small" type="text" :value="chroma(selectedColorHex).rgb()[2]" @input="onChangeB">
+                        <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[2]" @input="onChangeB">
                       </div>
                     </div>
                   </div>
