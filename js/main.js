@@ -172,18 +172,37 @@ const vue = {
     },
 
     selectedColorBoxStyle() {
+      let actualColorText = this.selectedColorHex;
+      if (this.config.colorExpression === 'colorf') {
+        actualColorText = this.getColorHexUsingPrecision(this.selectedColorHex);
+      }
+
       return {
-        backgroundColor: this.selectedColorHex,
-        color: chroma(this.selectedColorHex).luminance() > 0.5 ? '#111' : '#eee',
+        backgroundColor: actualColorText,
+        color: chroma(actualColorText).luminance() > 0.5 ? '#111' : '#eee',
       }
     }
   },
 
   methods: {
+    getColorHexUsingPrecision(colorText) {
+      const precision = this.config.precision;
+      const [r, g, b] = chroma(colorText).gl();
+      const r2 = Number(r.toFixed(precision));
+      const g2 = Number(g.toFixed(precision));
+      const b2 = Number(b.toFixed(precision));
+      return chroma.gl(r2, g2, b2).hex();
+    },
+
     panelStyle(colorText) {
+      let actualColorText = colorText;
+      if (this.config.colorExpression === 'colorf') {
+        actualColorText = this.getColorHexUsingPrecision(colorText);
+      }
+
       return {
-        backgroundColor: colorText,
-        color: chroma(colorText).luminance() > 0.5 ? 'black' : 'white',
+        backgroundColor: actualColorText,
+        color: chroma(actualColorText).luminance() > 0.5 ? 'black' : 'white',
         textAlign: 'center',
       };
     },
