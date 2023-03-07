@@ -10,11 +10,18 @@ https://voidproc.github.io/siv3d-palette-browser/
 
 # 使い方
 
-色のボタンをクリックすると、ボタンに表示されているテキストをコピーできます。
+- 色のボタンをクリックすると、ボタンに表示されているテキストをコピーできます。
+- 色名で絞り込み検索ができます。
 
-`Palette::Red` のような色名だけでなく、`Color{ 255, 0, 0 }` や `ColorF{ 1.0, 0.0, 0.0 }` といった形式でコピーすることもできます（"Control..." 内で切り替えられます）。
+![screenshot search](./img/screenshot_search.png)
 
-RGB各成分のスライダーで細かく色を編集することができます（"Color Editor..." 内で操作できます）。
+- `Palette::Red` のような色名だけでなく、`Color{ 255, 0, 0 }` や `ColorF{ 1.0, 0.0, 0.0 }`、あるいは `#ff0000` といった形式でコピーすることもできます（"Control..." 内で切り替えられます）。
+
+![screenshot color mode](./img/screenshot_color_mode.png)
+
+- RGB各成分のスライダーで細かく色を編集することができます（"Color Editor..." 内で操作できます）。
+
+![screenshot edit color](./img/screenshot_edit_color.png)
 
 # 動作環境
 
