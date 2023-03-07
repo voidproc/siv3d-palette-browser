@@ -28,11 +28,11 @@
       </div>
     </section>
 
-    <div class="fixed-area" :style="{ backgroundColor: bgColor }">
+    <div class="fixed-area" :style="fixedAreaStyle">
 
       <div class="control-area-header" :style="configHeaderStyle" @click="isVisibleControlArea = !isVisibleControlArea">
-          <span :style="{ textDecoration: (!isVisibleControlArea) ? 'underline' : 'none' }">Control<span v-if="!isVisibleControlArea">...</span></span>
-          <span class="icon"><i class="fa-solid" :class="isVisibleControlArea ? 'fa-caret-up' : 'fa-caret-down'"></i></span>
+        <span :style="controlAreaHeaderTextStyle">Control<span v-if="!isVisibleControlArea">...</span></span>
+        <span class="icon"><i class="fa-solid" :class="isVisibleControlArea ? 'fa-caret-up' : 'fa-caret-down'"></i></span>
       </div>
 
       <div class="control-area" :style="configAreaStyle" v-if="isVisibleControlArea">
@@ -48,7 +48,7 @@
         <div class="field">
           <div class="control">
             <div class="buttons has-addons">
-              <button class="button" :class="{ 'is-info': config.colorExpression === i.toLowerCase() }" @click="onClickConfigColorExpression(i.toLowerCase())" v-for="i in ['Palette', 'Color', 'ColorF', 'Hex', 'Web']" :key="i">{{i}}</button>
+              <button class="button" :class="expressionButtonClass(expression)" @click="onClickExpressionButton(expression.toLowerCase())" v-for="expression in expressionLabels" :key="expression">{{expression}}</button>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@
       </div>
 
       <div class="color-editor-area-header" :style="configHeaderStyle" @click="isVisibleEditor = !isVisibleEditor">
-        <span :style="{ textDecoration: (!isVisibleEditor) ? 'underline' : 'none' }">Color Editor<span v-if="!isVisibleEditor">...</span></span>
+        <span :style="editorAreaHeaderTextStyle">Color Editor<span v-if="!isVisibleEditor">...</span></span>
         <span class="icon"><i class="fa-solid" :class="isVisibleEditor ? 'fa-caret-up' : 'fa-caret-down'"></i></span>
       </div>
 
@@ -94,13 +94,13 @@
                 <input class="color-picker-button" type="color" :value="selectedColorHex" @input="onPickColor">
               </div>
 
-              <button class="button is-small" style="width:100%" title="背景色に設定する..." @click="onClickSetToBgButton">Set to BG</button>
+              <button class="button set-bgcolor-button is-small" title="背景色に設定する..." @click="onClickSetToBgButton">Set to BG</button>
             </div>
 
             <div class="column">
               <div class="field is-grouped">
                 <div class="control">
-                  <input type="range" min="0" max="255" step="1" :value="chroma(selectedColorHex).rgb()[0]" @input="onChangeR">
+                  <input type="range" min="0" max="255" step="1" :value="selectedColorRgb[0]" @input="onChangeR">
                 </div>
                 <div class="field has-addons">
                   <div class="control">
@@ -109,14 +109,14 @@
                     </a>
                   </div>
                   <div class="control">
-                    <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[0]" @input="onChangeR">
+                    <input class="input is-small" type="number" min="0" max="255" :value="selectedColorRgb[0]" @input="onChangeR">
                   </div>
                 </div>
               </div>
 
               <div class="field is-grouped">
                 <div class="control">
-                  <input type="range" min="0" max="255" step="1" :value="chroma(selectedColorHex).rgb()[1]" @input="onChangeG">
+                  <input type="range" min="0" max="255" step="1" :value="selectedColorRgb[1]" @input="onChangeG">
                 </div>
                 <div class="field has-addons">
                   <div class="control">
@@ -125,14 +125,14 @@
                     </a>
                   </div>
                   <div class="control">
-                    <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[1]" @input="onChangeG">
+                    <input class="input is-small" type="number" min="0" max="255" :value="selectedColorRgb[1]" @input="onChangeG">
                   </div>
                 </div>
               </div>
 
               <div class="field is-grouped">
                 <div class="control">
-                  <input type="range" min="0" max="255" step="1" :value="chroma(selectedColorHex).rgb()[2]" @input="onChangeB">
+                  <input type="range" min="0" max="255" step="1" :value="selectedColorRgb[2]" @input="onChangeB">
                 </div>
                 <div class="field has-addons">
                   <div class="control">
@@ -141,7 +141,7 @@
                     </a>
                   </div>
                   <div class="control">
-                    <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[2]" @input="onChangeB">
+                    <input class="input is-small" type="number" min="0" max="255" :value="selectedColorRgb[2]" @input="onChangeB">
                   </div>
                 </div>
               </div>

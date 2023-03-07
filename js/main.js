@@ -9,10 +9,17 @@ const vue = {
       isVisibleControlArea: false,
       isVisibleEditor: false,
       config: {
-        colorExpression: 'palette',  // 'palette'(fallback to color) | 'color' | 'colorf' | 'hex' | 'web'
+        expression: 'palette',  // 'palette'(fallback to color) | 'color' | 'colorf' | 'hex' | 'web'
         precision: 2,
         withAlpha: false,
       },
+      expressionLabels: [
+        'Palette',
+        'Color',
+        'ColorF',
+        'Hex',
+        'Web',
+      ],
       palette: [ 
         { siv: "Black", web: "black", },
         { siv: "Dimgray", web: "dimgray", },
@@ -206,9 +213,27 @@ const vue = {
       }
     },
 
+    fixedAreaStyle() {
+      return {
+        backgroundColor: this.bgColor,
+      }
+    },
+
     configHeaderStyle() {
       return {
         color: this.getTextColorForBgLuminance(this.bgColor),
+      }
+    },
+
+    controlAreaHeaderTextStyle() {
+      return {
+        textDecoration: (!this.isVisibleControlArea) ? 'underline' : 'none',
+      }
+    },
+
+    editorAreaHeaderTextStyle() {
+      return {
+        textDecoration: (!this.isVisibleEditor) ? 'underline' : 'none',
       }
     },
 
@@ -220,7 +245,7 @@ const vue = {
 
     selectedColorBoxStyle() {
       let actualColorText = this.selectedColorHex;
-      if (this.config.colorExpression === 'colorf') {
+      if (this.config.expression === 'colorf') {
         actualColorText = this.getColorHexUsingPrecision(this.selectedColorHex);
       }
 
@@ -228,7 +253,11 @@ const vue = {
         backgroundColor: actualColorText,
         color: this.getTextColorForBgLuminance(actualColorText),
       }
-    }
+    },
+
+    selectedColorRgb() {
+      return chroma(this.selectedColorHex).rgb();
+    },
   },
 
   methods: {
@@ -247,7 +276,7 @@ const vue = {
 
     panelStyle(colorText) {
       let actualColorText = colorText;
-      if (this.config.colorExpression === 'colorf') {
+      if (this.config.expression === 'colorf') {
         actualColorText = this.getColorHexUsingPrecision(colorText);
       }
 
@@ -258,8 +287,14 @@ const vue = {
       };
     },
 
-    onClickConfigColorExpression(expression) {
-      this.config.colorExpression = expression;
+    expressionButtonClass(expression) {
+      return {
+        'is-info': this.config.expression === expression.toLowerCase(),
+      };
+    },
+
+    onClickExpressionButton(expression) {
+      this.config.expression = expression;
     },
 
     onClickPanel(colorObj, event) {
@@ -277,17 +312,17 @@ const vue = {
     },
 
     onChangeR(event) {
-      const rgb = chroma(this.selectedColorHex).rgb();
+      const rgb = this.selectedColorRgb;
       this.selectedColorHex = chroma([event.target.value, rgb[1], rgb[2]]).hex();
     },
 
     onChangeG(event) {
-      const rgb = chroma(this.selectedColorHex).rgb();
+      const rgb = this.selectedColorRgb;
       this.selectedColorHex = chroma([rgb[0], event.target.value, rgb[2]]).hex();
     },
 
     onChangeB(event) {
-      const rgb = chroma(this.selectedColorHex).rgb();
+      const rgb = this.selectedColorRgb;
       this.selectedColorHex = chroma([rgb[0], rgb[1], event.target.value]).hex();
     },
 
@@ -304,13 +339,13 @@ const vue = {
     configuredColorText(colorHex) {
       const color = chroma(colorHex);
 
-      switch (this.config.colorExpression) {
+      switch (this.config.expression) {
         case 'palette':
         case 'web':
           {
             if (this.paletteFromHex[colorHex]) {
               const colorname = this.paletteFromHex[colorHex];
-              if (this.config.colorExpression === 'web') {
+              if (this.config.expression === 'web') {
                 return colorname.toLowerCase();
               }
 

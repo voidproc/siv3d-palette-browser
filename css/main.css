@@ -79,11 +79,7 @@ body {
 }
 
 .set-bgcolor-button {
-  padding: 0;
   width: 8rem;
-  height: 1.5rem;
-  cursor: pointer;
-  border-radius: 4px;
 }
 
 .color-panel {
@@ -103,6 +99,7 @@ body {
     font-size: 70%;
   }
 }
+
 .color-panel-clicked {
   animation-duration: 0.2s;
   animation-name: color-panel-clicked;
@@ -117,7 +114,6 @@ body {
   to {
     transform: scale(1.0, 1.0);
     filter: brightness(1.0) opacity(1.0);
-    ;
   }
 }
 
