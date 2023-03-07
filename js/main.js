@@ -159,9 +159,30 @@ const vue = {
   },
 
   created() {
+    // Hexから色名への逆引き用テーブルを用意
+
     this.paletteFromHex = {};
     for (const color of this.palette) {
       this.paletteFromHex[chroma(color.web).hex()] = color.siv;
+    }
+
+    // URLパラメータを参照して設定を行う
+    // 設定可能なクエリ:
+    // opencontrol=1  Controlエリアを開いた状態にする
+    // openeditor=1   ColorEditorエリアを開いた状態にする
+    // color=色名     指定した色を選択した状態にする
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('opencontrol') === '1') {
+      this.isVisibleControlArea = true;
+    }
+    if (params.get('openeditor') === '1') {
+      this.isVisibleEditor = true;
+    }
+
+    const color = params.get('color');
+    if (color !== null) {
+      this.selectedColorHex = chroma(color).hex();
     }
   },
 
