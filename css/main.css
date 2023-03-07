@@ -15,7 +15,8 @@ body {
   top: 0;
   z-index: 999;
   background-color: #fafafa;
-  padding-bottom: 1.5em;
+  padding-bottom: 0.5em;
+  margin: 0 1em 0 1em;
 }
 
 .control-area-header,
@@ -28,8 +29,8 @@ body {
   cursor: pointer;
 }
 
-.color-editor-area-header {
-  margin-bottom: 1rem;
+.color-editor-area {
+  margin-top: 1rem;
 }
 
 .control-area,

@@ -28,126 +28,128 @@
       </div>
     </section>
 
-    <section class="section section-custom">
-      <div class="container">
+    <div class="fixed-area">
 
-        <div class="fixed-area">
+      <div class="control-area-header" @click="isVisibleControlArea = !isVisibleControlArea">
+          <span :style="{ textDecoration: (!isVisibleControlArea) ? 'underline' : 'none' }">Control<span v-if="!isVisibleControlArea">...</span></span>
+          <span class="icon"><i class="fa-solid" :class="isVisibleControlArea ? 'fa-caret-up' : 'fa-caret-down'"></i></span>
+      </div>
 
-          <div class="control-area-header" :style="{ textDecoration: (!isVisibleControlArea) ? 'underline' : 'none' }" @click="isVisibleControlArea = !isVisibleControlArea">
-              Control<span v-if="!isVisibleControlArea">...</span>
+      <div class="control-area" v-if="isVisibleControlArea">
+        <div class="field">
+          <div class="control has-icons-left">
+            <input type="text" class="input" v-model="searchText" placeholder="Search..." />
+            <span class="icon is-left">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
           </div>
+        </div>
 
-          <div class="control-area" v-if="isVisibleControlArea">
-            <div class="field">
-              <div class="control has-icons-left">
-                <input type="text" class="input" v-model="searchText" placeholder="Search..." />
-                <span class="icon is-left">
-                  <i class="fa-solid fa-magnifying-glass"></i>
+        <div class="field">
+          <div class="control">
+            <div class="buttons has-addons">
+              <button class="button" :class="{ 'is-info': config.colorExpression === i.toLowerCase() }" @click="onClickConfigColorExpression(i.toLowerCase())" v-for="i in ['Palette', 'Color', 'ColorF', 'Hex', 'Web']" :key="i">{{i}}</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field has-addons">
+          <div class="control">
+            <a class="button is-static">
+              Precision
+            </a>
+          </div>
+          <div class="control">
+            <input class="input" type="number" min="1" max="6" title="'ColorF'における小数点以下の桁数 (1～)&#13;&#10;※桁数を小さく設定することにより、元のPaletteの色との差異が大きくなるおそれがあります." placeholder="小数点以下の桁数" v-model="config.precision">
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <label class="checkbox">
+              <input type="checkbox" v-model="config.withAlpha">
+              with alpha
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="color-editor-area-header" @click="isVisibleEditor = !isVisibleEditor">
+        <span :style="{ textDecoration: (!isVisibleEditor) ? 'underline' : 'none' }">Color Editor<span v-if="!isVisibleEditor">...</span></span>
+        <span class="icon"><i class="fa-solid" :class="isVisibleEditor ? 'fa-caret-up' : 'fa-caret-down'"></i></span>
+      </div>
+
+      <div class="color-editor-area" v-if="isVisibleEditor">
+        <div class="block">
+          <div class="columns">
+            <div class="column is-narrow">
+              <div class="box selected-color-box has-text-centered" :style="selectedColorBoxStyle" :title="configuredColorText(selectedColorHex)" v-on:click.stop="onClickPanel(selectedColorHex, $event)">
+                {{ configuredColorText(selectedColorHex) }}
+              </div>
+              <div class="box color-picker-button-container has-text-centered" :style="selectedColorBoxStyle">
+                <span class="icon is-small">
+                  <i class="fa-solid fa-palette"></i>
                 </span>
+                <input class="color-picker-button" type="color" :value="selectedColorHex" @input="onPickColor">
               </div>
             </div>
 
-            <div class="field">
-              <div class="control">
-                <div class="buttons has-addons">
-                  <button class="button" :class="{ 'is-info': config.colorExpression === i.toLowerCase() }" @click="onClickConfigColorExpression(i.toLowerCase())" v-for="i in ['Palette', 'Color', 'ColorF', 'Hex', 'Web']" :key="i">{{i}}</button>
+            <div class="column">
+              <div class="field is-grouped">
+                <div class="control">
+                  <input type="range" min="0" max="255" step="1" :value="chroma(selectedColorHex).rgb()[0]" @input="onChangeR">
+                </div>
+                <div class="field has-addons">
+                  <div class="control">
+                    <a class="button is-static is-small">
+                      R
+                    </a>
+                  </div>
+                  <div class="control">
+                    <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[0]" @input="onChangeR">
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="field has-addons">
-              <div class="control">
-                <a class="button is-static">
-                  Precision
-                </a>
-              </div>
-              <div class="control">
-                <input class="input" type="number" min="1" max="6" title="'ColorF'における小数点以下の桁数 (1～)&#13;&#10;※桁数を小さく設定することにより、元のPaletteの色との差異が大きくなるおそれがあります." placeholder="小数点以下の桁数" v-model="config.precision">
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control">
-                <label class="checkbox">
-                  <input type="checkbox" v-model="config.withAlpha">
-                  with alpha
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="color-editor-area-header" :style="{ textDecoration: (!isVisibleEditor) ? 'underline' : 'none' }" @click="isVisibleEditor = !isVisibleEditor">
-            Color Editor<span v-if="!isVisibleEditor">...</span>
-          </div>
-
-          <div class="color-editor-area" v-if="isVisibleEditor">
-            <div class="block">
-              <div class="columns">
-                <div class="column is-narrow">
-                  <div class="box selected-color-box has-text-centered" :style="selectedColorBoxStyle" :title="configuredColorText(selectedColorHex)" v-on:click.stop="onClickPanel(selectedColorHex, $event)">
-                    {{ configuredColorText(selectedColorHex) }}
+              <div class="field is-grouped">
+                <div class="control">
+                  <input type="range" min="0" max="255" step="1" :value="chroma(selectedColorHex).rgb()[1]" @input="onChangeG">
+                </div>
+                <div class="field has-addons">
+                  <div class="control">
+                    <a class="button is-static is-small">
+                      G
+                    </a>
                   </div>
-                  <div class="box color-picker-button-container has-text-centered" :style="selectedColorBoxStyle">
-                    <span class="icon is-small">
-                      <i class="fa-solid fa-palette"></i>
-                    </span>
-                    <input class="color-picker-button" type="color" :value="selectedColorHex" @input="onPickColor">
+                  <div class="control">
+                    <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[1]" @input="onChangeG">
                   </div>
                 </div>
+              </div>
 
-                <div class="column">
-                  <div class="field is-grouped">
-                    <div class="control">
-                      <input type="range" min="0" max="255" step="1" :value="chroma(selectedColorHex).rgb()[0]" @input="onChangeR">
-                    </div>
-                    <div class="field has-addons">
-                      <div class="control">
-                        <a class="button is-static is-small">
-                          R
-                        </a>
-                      </div>
-                      <div class="control">
-                        <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[0]" @input="onChangeR">
-                      </div>
-                    </div>
+              <div class="field is-grouped">
+                <div class="control">
+                  <input type="range" min="0" max="255" step="1" :value="chroma(selectedColorHex).rgb()[2]" @input="onChangeB">
+                </div>
+                <div class="field has-addons">
+                  <div class="control">
+                    <a class="button is-static is-small">
+                      B
+                    </a>
                   </div>
-
-                  <div class="field is-grouped">
-                    <div class="control">
-                      <input type="range" min="0" max="255" step="1" :value="chroma(selectedColorHex).rgb()[1]" @input="onChangeG">
-                    </div>
-                    <div class="field has-addons">
-                      <div class="control">
-                        <a class="button is-static is-small">
-                          G
-                        </a>
-                      </div>
-                      <div class="control">
-                        <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[1]" @input="onChangeG">
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="field is-grouped">
-                    <div class="control">
-                      <input type="range" min="0" max="255" step="1" :value="chroma(selectedColorHex).rgb()[2]" @input="onChangeB">
-                    </div>
-                    <div class="field has-addons">
-                      <div class="control">
-                        <a class="button is-static is-small">
-                          B
-                        </a>
-                      </div>
-                      <div class="control">
-                        <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[2]" @input="onChangeB">
-                      </div>
-                    </div>
+                  <div class="control">
+                    <input class="input is-small" type="number" min="0" max="255" :value="chroma(selectedColorHex).rgb()[2]" @input="onChangeB">
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <section class="section section-custom">
+      <div class="container">
 
         <div class="columns is-multiline is-mobile">
           <div class="column is-2-tablet is-one-third-mobile" v-for="color in filteredPalette" :key="color">
