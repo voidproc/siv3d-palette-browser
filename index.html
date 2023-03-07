@@ -15,9 +15,9 @@
 <body>
   <div id="app">
 
-    <section class="hero" :style="{ backgroundColor: bgColor }">
+    <section class="hero" :style="titleStyle">
       <div class="hero-body logo-area">
-        <p class="title logo-title has-text-centered has-text-weight-bold">
+        <p class="title logo-title has-text-centered has-text-weight-bold" :style="titleBodyStyle">
           <span class="icon-text">
             <span class="icon">
               <i class="fa-solid fa-palette"></i>
@@ -30,12 +30,12 @@
 
     <div class="fixed-area" :style="{ backgroundColor: bgColor }">
 
-      <div class="control-area-header" @click="isVisibleControlArea = !isVisibleControlArea">
+      <div class="control-area-header" :style="configHeaderStyle" @click="isVisibleControlArea = !isVisibleControlArea">
           <span :style="{ textDecoration: (!isVisibleControlArea) ? 'underline' : 'none' }">Control<span v-if="!isVisibleControlArea">...</span></span>
           <span class="icon"><i class="fa-solid" :class="isVisibleControlArea ? 'fa-caret-up' : 'fa-caret-down'"></i></span>
       </div>
 
-      <div class="control-area" v-if="isVisibleControlArea">
+      <div class="control-area" :style="configAreaStyle" v-if="isVisibleControlArea">
         <div class="field">
           <div class="control has-icons-left">
             <input type="text" class="input" v-model="searchText" placeholder="Search..." />
@@ -74,12 +74,12 @@
         </div>
       </div>
 
-      <div class="color-editor-area-header" @click="isVisibleEditor = !isVisibleEditor">
+      <div class="color-editor-area-header" :style="configHeaderStyle" @click="isVisibleEditor = !isVisibleEditor">
         <span :style="{ textDecoration: (!isVisibleEditor) ? 'underline' : 'none' }">Color Editor<span v-if="!isVisibleEditor">...</span></span>
         <span class="icon"><i class="fa-solid" :class="isVisibleEditor ? 'fa-caret-up' : 'fa-caret-down'"></i></span>
       </div>
 
-      <div class="color-editor-area" v-if="isVisibleEditor">
+      <div class="color-editor-area" :style="configAreaStyle" v-if="isVisibleEditor">
         <div class="block">
           <div class="columns">
             <div class="column is-narrow">

@@ -172,6 +172,31 @@ const vue = {
       return this.palette.filter(color => color.web.includes(this.searchText.toLowerCase()));
     },
 
+    titleStyle() {
+      return {
+        backgroundColor: this.bgColor,
+        color: this.getTextColorForBgLuminance(this.bgColor),
+      }
+    },
+
+    titleBodyStyle() {
+      return {
+        color: this.getTextColorForBgLuminance(this.bgColor),
+      }
+    },
+
+    configHeaderStyle() {
+      return {
+        color: this.getTextColorForBgLuminance(this.bgColor),
+      }
+    },
+
+    configAreaStyle() {
+      return {
+        borderColor: this.getTextColorForBgLuminance(this.bgColor),
+      }
+    },
+
     selectedColorBoxStyle() {
       let actualColorText = this.selectedColorHex;
       if (this.config.colorExpression === 'colorf') {
@@ -180,7 +205,7 @@ const vue = {
 
       return {
         backgroundColor: actualColorText,
-        color: chroma(actualColorText).luminance() > 0.5 ? '#111' : '#eee',
+        color: this.getTextColorForBgLuminance(actualColorText),
       }
     }
   },
@@ -195,6 +220,10 @@ const vue = {
       return chroma.gl(r2, g2, b2).hex();
     },
 
+    getTextColorForBgLuminance(bgcolor) {
+      return chroma(bgcolor).luminance() > 0.5 ? '#222' : '#efefef';
+    },
+
     panelStyle(colorText) {
       let actualColorText = colorText;
       if (this.config.colorExpression === 'colorf') {
@@ -203,7 +232,7 @@ const vue = {
 
       return {
         backgroundColor: actualColorText,
-        color: chroma(actualColorText).luminance() > 0.5 ? 'black' : 'white',
+        color: this.getTextColorForBgLuminance(actualColorText),
         textAlign: 'center',
       };
     },
