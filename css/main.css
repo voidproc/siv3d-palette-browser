@@ -20,19 +20,23 @@ body {
 
 .control-area-header,
 .color-editor-area-header {
-  padding: 0.30rem;
-  margin-bottom: 0.50rem;
+  padding: 0.3rem 0 0.2rem 0;
+  margin-bottom: 0.25rem;
   font-size: 1em;
   font-weight: bold;
   color: gray;
   cursor: pointer;
 }
 
+.color-editor-area-header {
+  margin-bottom: 1rem;
+}
+
 .control-area,
 .color-editor-area {
   border-left: 4px solid gray;
   padding-left: 1rem;
-  margin-left: 0.5rem;
+  margin-left: 0.25rem;
   margin-bottom: 1rem;
 }
 
