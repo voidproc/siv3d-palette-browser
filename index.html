@@ -15,7 +15,7 @@
 <body>
   <div id="app">
 
-    <section class="hero">
+    <section class="hero" :style="{ backgroundColor: bgColor }">
       <div class="hero-body logo-area">
         <p class="title logo-title has-text-centered has-text-weight-bold">
           <span class="icon-text">
@@ -28,7 +28,7 @@
       </div>
     </section>
 
-    <div class="fixed-area">
+    <div class="fixed-area" :style="{ backgroundColor: bgColor }">
 
       <div class="control-area-header" @click="isVisibleControlArea = !isVisibleControlArea">
           <span :style="{ textDecoration: (!isVisibleControlArea) ? 'underline' : 'none' }">Control<span v-if="!isVisibleControlArea">...</span></span>
@@ -86,12 +86,15 @@
               <div class="box selected-color-box has-text-centered" :style="selectedColorBoxStyle" :title="configuredColorText(selectedColorHex)" v-on:click.stop="onClickPanel(selectedColorHex, $event)">
                 {{ configuredColorText(selectedColorHex) }}
               </div>
-              <div class="box color-picker-button-container has-text-centered" :style="selectedColorBoxStyle">
+
+              <div class="box color-picker-button-container has-text-centered" :style="selectedColorBoxStyle" title="カラーピッカーを開く...">
                 <span class="icon is-small">
                   <i class="fa-solid fa-palette"></i>
                 </span>
                 <input class="color-picker-button" type="color" :value="selectedColorHex" @input="onPickColor">
               </div>
+
+              <button class="button is-small" style="width:100%" title="背景色に設定する..." @click="onClickSetToBgButton">Set to BG</button>
             </div>
 
             <div class="column">

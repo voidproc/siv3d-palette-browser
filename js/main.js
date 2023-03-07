@@ -5,6 +5,7 @@ const vue = {
     return {
       searchText: '',
       selectedColorHex: '#000000',
+      bgColor: '#fafafa',
       isVisibleControlArea: false,
       isVisibleEditor: false,
       config: {
@@ -242,6 +243,12 @@ const vue = {
 
     onPickColor(event) {
       this.selectedColorHex = event.target.value;
+    },
+
+    onClickSetToBgButton() {
+      const bgColor = this.selectedColorHex;
+      this.bgColor = bgColor;
+      document.body.style.backgroundColor = bgColor;
     },
 
     configuredColorText(colorHex) {
