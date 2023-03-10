@@ -1,5 +1,6 @@
 body {
   background-color: #fafafa;
+  color: #222;
 }
 
 .input[disabled] {
@@ -12,6 +13,21 @@ body {
 
 .logo-title {
   font-size: 1.2rem;
+}
+
+.gh-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px;
+}
+
+.gh-icon a:link,
+.gh-icon a:visited,
+.gh-icon a:hover,
+.gh-icon a:active
+{
+  color: inherit;
 }
 
 .fixed-area {
