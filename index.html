@@ -15,18 +15,7 @@
 <body>
   <div id="app">
 
-    <section class="hero" :style="titleStyle">
-      <div class="hero-body logo-area">
-        <p class="title logo-title has-text-centered has-text-weight-bold" :style="titleBodyStyle">
-          <span class="icon-text">
-            <span class="icon">
-              <i class="fa-solid fa-palette"></i>
-            </span>
-            <span>Siv3D Palette Browser</span>
-          </span>
-        </p>
-      </div>
-    </section>
+    <app-title :bg-color="bgColor"></app-title>
 
     <div class="fixed-area" :style="fixedAreaStyle">
 
@@ -60,7 +49,7 @@
             </a>
           </div>
           <div class="control">
-            <input class="input" type="number" min="1" max="6" title="'ColorF'における小数点以下の桁数 (1～)&#13;&#10;※桁数を小さく設定することにより、元のPaletteの色との差異が大きくなるおそれがあります." placeholder="小数点以下の桁数" v-model="config.precision">
+            <input class="input" type="number" min="1" max="6" title="'ColorF'における小数点以下の桁数 (1～)&#13;&#10;※桁数を小さく設定することにより、元のPaletteの色との差異が大きくなるおそれがあります." v-model="config.precision">
           </div>
         </div>
 
@@ -69,6 +58,15 @@
             <label class="checkbox">
               <input type="checkbox" v-model="config.withAlpha">
               with alpha
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <label class="checkbox">
+              <input type="checkbox" v-model="config.useParentheses">
+              use ( )
             </label>
           </div>
         </div>
@@ -83,10 +81,12 @@
         <div class="block">
           <div class="columns">
             <div class="column is-narrow">
+              <!-- selected-color-box -->
               <div class="box selected-color-box has-text-centered" :style="selectedColorBoxStyle" :title="configuredColorText(selectedColorHex)" v-on:click.stop="onClickPanel(selectedColorHex, $event)">
                 {{ configuredColorText(selectedColorHex) }}
               </div>
 
+              <!-- color-picker-button -->
               <div class="box color-picker-button-container has-text-centered" :style="selectedColorBoxStyle" title="カラーピッカーを開く...">
                 <span class="icon is-small">
                   <i class="fa-solid fa-palette"></i>
@@ -94,57 +94,22 @@
                 <input class="color-picker-button" type="color" :value="selectedColorHex" @input="onPickColor">
               </div>
 
+              <!-- set-bgcolor-button -->
               <button class="button set-bgcolor-button is-small" title="背景色に設定する..." @click="onClickSetToBgButton">Set to BG</button>
             </div>
 
+            <div class="column is-narrow">
+              <color-element-input label="R" min="0" max="255" step="1" :value="selectedColorRgb[0]" @input="onChangeR"></color-element-input>
+              <color-element-input label="G" min="0" max="255" step="1" :value="selectedColorRgb[1]" @input="onChangeG"></color-element-input>
+              <color-element-input label="B" min="0" max="255" step="1" :value="selectedColorRgb[2]" @input="onChangeB"></color-element-input>
+              <color-element-input label="A" min="0" max="255" step="1" :enabled="config.withAlpha" v-model="alpha"></color-element-input>
+            </div>
+
             <div class="column">
-              <div class="field is-grouped">
-                <div class="control">
-                  <input type="range" min="0" max="255" step="1" :value="selectedColorRgb[0]" @input="onChangeR">
-                </div>
-                <div class="field has-addons">
-                  <div class="control">
-                    <a class="button is-static is-small">
-                      R
-                    </a>
-                  </div>
-                  <div class="control">
-                    <input class="input is-small" type="number" min="0" max="255" :value="selectedColorRgb[0]" @input="onChangeR">
-                  </div>
-                </div>
+              <div class="history-header">
+                History
               </div>
-
-              <div class="field is-grouped">
-                <div class="control">
-                  <input type="range" min="0" max="255" step="1" :value="selectedColorRgb[1]" @input="onChangeG">
-                </div>
-                <div class="field has-addons">
-                  <div class="control">
-                    <a class="button is-static is-small">
-                      G
-                    </a>
-                  </div>
-                  <div class="control">
-                    <input class="input is-small" type="number" min="0" max="255" :value="selectedColorRgb[1]" @input="onChangeG">
-                  </div>
-                </div>
-              </div>
-
-              <div class="field is-grouped">
-                <div class="control">
-                  <input type="range" min="0" max="255" step="1" :value="selectedColorRgb[2]" @input="onChangeB">
-                </div>
-                <div class="field has-addons">
-                  <div class="control">
-                    <a class="button is-static is-small">
-                      B
-                    </a>
-                  </div>
-                  <div class="control">
-                    <input class="input is-small" type="number" min="0" max="255" :value="selectedColorRgb[2]" @input="onChangeB">
-                  </div>
-                </div>
-              </div>
+              <span class="history-item" :style="{ backgroundColor: h }" :title="configuredColorText(h)" @click="onClickHistoryItem(h)" v-for="h in history" :key="h"></span>
             </div>
           </div>
         </div>

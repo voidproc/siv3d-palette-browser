@@ -2,6 +2,10 @@ body {
   background-color: #fafafa;
 }
 
+.input[disabled] {
+  border-color: #dbdbdb;
+}
+
 .logo-area {
   padding: 0.75rem 0.75rem;
 }
@@ -52,6 +56,7 @@ body {
   align-items: center;
   cursor: pointer;
   border-radius: 4px;
+  border: 1px solid #dbdbdb;
 }
 
 .color-picker-button-container {
@@ -64,6 +69,7 @@ body {
   justify-items: center;
   align-items: center;
   border-radius: 4px;
+  border: 1px solid #dbdbdb;
 }
 
 .color-picker-button {
@@ -80,6 +86,20 @@ body {
 
 .set-bgcolor-button {
   width: 8rem;
+}
+
+.history-header {
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.history-item {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid #dbdbdb;
+  margin: 0.1rem;
+  cursor: pointer;
 }
 
 .color-panel {
