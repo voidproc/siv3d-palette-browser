@@ -193,19 +193,25 @@ const ColorExpression = {
     'Web',
   ],
 
+  colorNameMap_: {},
+
   getBracket_(useParentheses) {
     return useParentheses ? { open: '(', close: ')' } : { open: '{ ', close: ' }' };
+  },
+
+  getColorName_(colorHex) {
+    return this.colorNameMap_[colorHex];
   },
 
   get(colorHex, alphaNum=null, useParentheses=false) {
     return {
       /**
        * OpenSiv3DのPaletteで定義されている名称での表現
-       * 対応する名称が存在しない場合は Color{ r, g, b} での表現
+       * 対応する名称が存在しない場合は Color{ r, g, b } での表現
        */
       palette() {
-        const name = chroma(colorHex).name();
-        if (name.startsWith('#')) {
+        const name = ColorExpression.getColorName_(colorHex);
+        if (!name) {
           return ColorExpression.get(colorHex, alphaNum, useParentheses).color();
         }
 
@@ -218,8 +224,8 @@ const ColorExpression = {
        * 対応する名称が存在しない場合は Color{ r, g, b} での表現
        */
       web() {
-        const name = chroma(colorHex).name();
-        if (name.startsWith('#')) {
+        const name = ColorExpression.getColorName_(colorHex);
+        if (!name) {
           return ColorExpression.get(colorHex, alphaNum, useParentheses).color();
         }
         return name;
@@ -257,8 +263,17 @@ const ColorExpression = {
         return colorHex;
       }
     }
+  },
+
+  init() {
+    for (const color of Palette) {
+      this.colorNameMap_[chroma(color.web).hex()] = color.web;
+    }
   }
 };
+
+ColorExpression.init();
+
 
 Vue.component('app-title', {
   props: [
