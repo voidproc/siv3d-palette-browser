@@ -472,6 +472,9 @@ const vue = {
       // 履歴に追加
       this.history = this.history.filter(elem => elem != clickedColorHex);
       this.history.unshift(clickedColorHex);
+      if (this.history.length > 16) {
+        this.history.splice(16);
+      }
 
       // クリップボードへのコピー
       let target = event.target;
