@@ -203,14 +203,14 @@ const ColorExpression = {
     return this.colorNameMap_[colorHex];
   },
 
-  get(colorHex, alphaNum=null, useParentheses=false) {
+  get(colorHex, colorObj, alphaNum=null, useParentheses=false) {
     return {
       /**
        * OpenSiv3DのPaletteで定義されている名称での表現
        * 対応する名称が存在しない場合は Color{ r, g, b } での表現
        */
       palette() {
-        const name = ColorExpression.getColorName_(colorHex);
+        const name = colorObj ? colorObj.web : ColorExpression.getColorName_(colorHex);
         if (!name) {
           return ColorExpression.get(colorHex, alphaNum, useParentheses).color();
         }
@@ -224,7 +224,7 @@ const ColorExpression = {
        * 対応する名称が存在しない場合は Color{ r, g, b} での表現
        */
       web() {
-        const name = ColorExpression.getColorName_(colorHex);
+        const name = colorObj ? colorObj.web : ColorExpression.getColorName_(colorHex);
         if (!name) {
           return ColorExpression.get(colorHex, alphaNum, useParentheses).color();
         }
@@ -516,21 +516,21 @@ const vue = {
       this.selectedColorHex = colorHex;
     },
 
-    configuredColorText(colorHex) {
+    configuredColorText(colorHex, colorObj) {
       const alpha = this.config.withAlpha ? this.alpha : null;
       const alphaf = this.config.withAlpha ? this.alpha / 255.0 : null;
 
       switch (this.config.expression) {
         case 'palette':
-          return ColorExpression.get(colorHex, alpha, this.config.useParentheses).palette();
+          return ColorExpression.get(colorHex, colorObj, alpha, this.config.useParentheses).palette();
         case 'web':
-          return ColorExpression.get(colorHex, alpha, this.config.useParentheses).web();
+          return ColorExpression.get(colorHex, colorObj, alpha, this.config.useParentheses).web();
         case 'color':
-          return ColorExpression.get(colorHex, alpha, this.config.useParentheses).color();
+          return ColorExpression.get(colorHex, colorObj, alpha, this.config.useParentheses).color();
         case 'colorf':
-          return ColorExpression.get(colorHex, alphaf, this.config.useParentheses).colorf(this.config.precision);
+          return ColorExpression.get(colorHex, colorObj, alphaf, this.config.useParentheses).colorf(this.config.precision);
         case 'hex':
-          return ColorExpression.get(colorHex, alpha, this.config.useParentheses).hex();
+          return ColorExpression.get(colorHex, colorObj, alpha, this.config.useParentheses).hex();
       }
     },
 

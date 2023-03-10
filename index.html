@@ -88,8 +88,8 @@
           <div class="columns">
             <div class="column is-narrow">
               <!-- selected-color-box -->
-              <div class="box selected-color-box has-text-centered" :style="selectedColorBoxStyle" :title="configuredColorText(selectedColorHex)" v-on:click.stop="onClickPanel(selectedColorHex, $event)">
-                {{ configuredColorText(selectedColorHex) }}
+              <div class="box selected-color-box has-text-centered" :style="selectedColorBoxStyle" :title="configuredColorText(selectedColorHex, null)" v-on:click.stop="onClickPanel(selectedColorHex, $event)">
+                {{ configuredColorText(selectedColorHex, null) }}
               </div>
 
               <!-- color-picker-button -->
@@ -115,7 +115,7 @@
               <div class="history-header">
                 History
               </div>
-              <span class="history-item" :style="{ backgroundColor: h }" :title="configuredColorText(h)" @click="onClickHistoryItem(h)" v-for="h in history" :key="h"></span>
+              <span class="history-item" :style="{ backgroundColor: h }" :title="configuredColorText(h, null)" @click="onClickHistoryItem(h)" v-for="h in history" :key="h"></span>
             </div>
           </div>
         </div>
@@ -126,12 +126,12 @@
       <div class="container">
 
         <div class="columns is-multiline is-mobile">
-          <div class="column is-2-tablet is-one-third-mobile" v-for="color in filteredPalette" :key="color">
+          <div class="column is-2-tablet is-one-third-mobile" v-for="color in filteredPalette" :key="color.web">
             <p class="notification color-panel"
               :style="panelStyle(color.web)"
-              :title="configuredColorText(chroma(color.web).hex())"
+              :title="configuredColorText(chroma(color.web).hex(), color)"
               v-on:click.stop="onClickPanel(color, $event)">
-              <span class="_is-hidden-mobile">{{ configuredColorText(chroma(color.web).hex()) }}</span>
+              <span>{{ configuredColorText(chroma(color.web).hex(), color) }}</span>
             </p>
           </div>
         </div>
@@ -144,7 +144,7 @@
         {{toast.text}}
       </div>
     </div>
-
+    
   </div>
   <script src="js/main.js"></script>
 </body>
