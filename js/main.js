@@ -354,6 +354,9 @@ const vue = {
       history: [],
       expressionLabels: ColorExpression.list,
       palette: Palette,
+      toast: {
+        text: 'Copied.',
+      },
     }
   },
 
@@ -478,6 +481,9 @@ const vue = {
       // アニメーション制御
       target.classList.remove('color-panel-clicked');
       setTimeout(() => target.classList.add('color-panel-clicked'), 1);
+
+      // toast
+      this.showToast(`Copied '${target.title}' to clipboard.`)
     },
 
     onChangeR(value) {
@@ -526,6 +532,14 @@ const vue = {
         case 'hex':
           return ColorExpression.get(colorHex, alpha, this.config.useParentheses).hex();
       }
+    },
+
+    showToast(text) {
+      this.toast.text = text;
+
+      const toastElem = document.getElementById('toast');
+      toastElem.classList.remove('show-toast');
+      setTimeout(() => toastElem.classList.add('show-toast'), 1);
     },
   }
 };
