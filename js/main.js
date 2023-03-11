@@ -343,9 +343,9 @@ Vue.component('color-element-input', {
     enabled: { default: true },
   },
   template: `
-    <div class="field is-grouped">
+    <div class="field is-grouped block-small">
       <div class="control">
-        <input type="range" :min="min" :max="max" :step="step" :value="value" :disabled="!enabled" @input="$emit('input', $event.target.value)">
+        <input class="color-slider" type="range" :min="min" :max="max" :step="step" :value="value" :disabled="!enabled" @input="$emit('input', $event.target.value)">
       </div>
       <div class="field has-addons">
         <div class="control">
@@ -376,6 +376,7 @@ const vue = {
         precision: 2,
         withAlpha: false,
         useParentheses: false,
+        sliderMode: 'rgb', // 'rgb' | 'hsv'
       },
       history: [],
       expressionLabels: ColorExpression.list,
@@ -464,6 +465,19 @@ const vue = {
     selectedColorRgb() {
       return chroma(this.selectedColorHex).rgb();
     },
+
+    selectedColorHsv() {
+      const [h, s, v] = chroma(this.selectedColorHex).hsv();
+      return [
+        Number((h || 0).toFixed(0)),
+        s.toFixed(2),
+        v.toFixed(2)];
+    },
+
+    selectedColorGrayscale() {
+      const [r, g, b] = chroma(this.selectedColorHex).rgb();
+      return Math.round((r + g + b) / 3);
+    },
   },
 
   methods: {
@@ -534,6 +548,25 @@ const vue = {
     onChangeB(value) {
       const rgb = this.selectedColorRgb;
       this.selectedColorHex = chroma([rgb[0], rgb[1], value]).hex();
+    },
+
+    onChangeH(value) {
+      const [h, s, v] = this.selectedColorHsv;
+      this.selectedColorHex = chroma.hsv(value, s, v).hex();
+    },
+
+    onChangeS(value) {
+      const [h, s, v] = this.selectedColorHsv;
+      this.selectedColorHex = chroma.hsv(h, value, v).hex();
+    },
+
+    onChangeV(value) {
+      const [h, s, v] = this.selectedColorHsv;
+      this.selectedColorHex = chroma.hsv(h, s, value).hex();
+    },
+
+    onChangeGrayscaleValue(value) {
+      this.selectedColorHex = chroma([value, value, value]).hex();
     },
 
     onPickColor(event) {

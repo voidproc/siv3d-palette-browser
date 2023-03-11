@@ -104,6 +104,15 @@ body {
   width: 8rem;
 }
 
+.block-small {
+  margin-bottom: 0.6rem !important;
+}
+
+.color-slider {
+  cursor: pointer;
+  vertical-align: middle;
+}
+
 .history-header {
   font-weight: bold;
   font-size: 0.8rem;
