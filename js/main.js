@@ -26,12 +26,27 @@ const ContrastColor = {
  * @param {number} precision 精度（小数点以下の桁数）
  * @returns {string}
  */
-function precisionColorHex(colorText, precision) {
+function precisionRgbColorHex(colorText, precision) {
   const [r, g, b] = chroma(colorText).gl();
   return chroma.gl(
     Number(r.toFixed(precision)),
     Number(g.toFixed(precision)),
     Number(b.toFixed(precision)),
+  ).hex();
+}
+
+/**
+ * ある色について、そのHSV成分（H:0～360、S,V:0～1で表される実数値）それぞれをprecisionで指定される精度とした色のHEXカラーコードを返す
+ * @param {string} colorHex 元となる色のHEXカラーコード
+ * @param {number} precision 精度（小数点以下の桁数）
+ * @returns {string}
+ */
+function precisionHsvColorHex(colorText, precision) {
+  const [h, s, v] = chroma(colorText).gl();
+  return chroma.gl(
+    Number((h || 0).toFixed(precision)),
+    Number(s.toFixed(precision)),
+    Number(v.toFixed(precision)),
   ).hex();
 }
 
@@ -189,6 +204,7 @@ const ColorExpression = {
     'Palette',
     'Color',
     'ColorF',
+    'HSV',
     'Hex',
     'Web',
   ],
@@ -221,7 +237,7 @@ const ColorExpression = {
 
       /**
        * webカラー名での表現
-       * 対応する名称が存在しない場合は Color{ r, g, b} での表現
+       * 対応する名称が存在しない場合は Color{ r, g, b } での表現
        */
       web() {
         const name = colorObj ? colorObj.web : ColorExpression.getColorName_(colorHex);
@@ -250,6 +266,16 @@ const ColorExpression = {
         const alphaText = alphaNum !== null ? `, ${alphaNum.toFixed(precision)}` : '';
         const bracket = ColorExpression.getBracket_(useParentheses);
         return `ColorF${bracket.open}${r.toFixed(precision)}, ${g.toFixed(precision)}, ${b.toFixed(precision)}${alphaText}${bracket.close}`;
+      },
+
+      /**
+       * HSV{ h, s, v } での表現
+       */
+      hsv(precision) {
+        const [h, s, v] = chroma(colorHex).hsv();
+        const alphaText = alphaNum !== null ? `, ${alphaNum.toFixed(precision)}` : '';
+        const bracket = ColorExpression.getBracket_(useParentheses);
+        return `HSV${bracket.open}${(h || 0).toFixed(precision)}, ${s.toFixed(precision)}, ${v.toFixed(precision)}${alphaText}${bracket.close}`;
       },
 
       /**
@@ -346,7 +372,7 @@ const vue = {
       isVisibleControlArea: false,
       isVisibleEditor: false,
       config: {
-        expression: 'palette',  // 'palette'(fallback to color) | 'color' | 'colorf' | 'hex' | 'web'
+        expression: 'palette',  // 'palette'(fallback to color) | 'color' | 'colorf' | 'hsv' | 'hex' | 'web'
         precision: 2,
         withAlpha: false,
         useParentheses: false,
@@ -423,7 +449,10 @@ const vue = {
     selectedColorBoxStyle() {
       let actualColorText = this.selectedColorHex;
       if (this.config.expression === 'colorf') {
-        actualColorText = precisionColorHex(this.selectedColorHex, this.config.precision);
+        actualColorText = precisionRgbColorHex(this.selectedColorHex, this.config.precision);
+      }
+      else if (this.config.expression === 'hsv') {
+        actualColorText = precisionHsvColorHex(this.selectedColorHex, this.config.precision);
       }
 
       return {
@@ -441,7 +470,10 @@ const vue = {
     panelStyle(colorText) {
       let actualColorText = colorText;
       if (this.config.expression === 'colorf') {
-        actualColorText = precisionColorHex(colorText, this.config.precision);
+        actualColorText = precisionRgbColorHex(colorText, this.config.precision);
+      }
+      else if (this.config.expression === 'hsv') {
+        actualColorText = precisionHsvColorHex(colorText, this.config.precision);
       }
 
       return {
@@ -532,6 +564,8 @@ const vue = {
           return ColorExpression.get(colorHex, colorObj, alpha, this.config.useParentheses).color();
         case 'colorf':
           return ColorExpression.get(colorHex, colorObj, alphaf, this.config.useParentheses).colorf(this.config.precision);
+        case 'hsv':
+          return ColorExpression.get(colorHex, colorObj, alphaf, this.config.useParentheses).hsv(this.config.precision);
         case 'hex':
           return ColorExpression.get(colorHex, colorObj, alpha, this.config.useParentheses).hex();
       }
