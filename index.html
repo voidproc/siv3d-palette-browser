@@ -105,16 +105,6 @@
             </div>
 
             <div class="column is-narrow">
-              <div class="block-small">
-                <div class="select is-small">
-                  <select v-model="config.sliderMode">
-                    <option selected value="rgb">RGB</option>
-                    <option value="hsv">HSV</option>
-                    <option value="grayscale">Grayscale</option>
-                  </select>
-                </div>
-              </div>
-
               <div v-if="config.sliderMode === 'rgb'">
                 <color-element-input label="R" min="0" max="255" step="1" :value="selectedColorRgb[0]" @input="onChangeR"></color-element-input>
                 <color-element-input label="G" min="0" max="255" step="1" :value="selectedColorRgb[1]" @input="onChangeG"></color-element-input>
@@ -129,6 +119,16 @@
                 <color-element-input label="Value" min="0" max="255" step="1" :value="selectedColorGrayscale" @input="onChangeGrayscaleValue"></color-element-input>
               </div>
               <color-element-input label="A" min="0" max="255" step="1" :enabled="config.withAlpha" v-model="alpha"></color-element-input>
+
+              <div class="block-small">
+                <div class="select is-small">
+                  <select v-model="config.sliderMode">
+                    <option value="rgb">RGB</option>
+                    <option value="hsv">HSV</option>
+                    <option value="grayscale">Grayscale</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
             <div class="column">
