@@ -228,7 +228,7 @@ const ColorExpression = {
       palette() {
         const name = colorObj ? colorObj.web : ColorExpression.getColorName_(colorHex);
         if (!name) {
-          return ColorExpression.get(colorHex, alphaNum, useParentheses).color();
+          return ColorExpression.get(colorHex, colorObj, alphaNum, useParentheses).color();
         }
 
         const alphaText = alphaNum !== null ? `.withAlpha(${alphaNum})` : '';
@@ -242,7 +242,7 @@ const ColorExpression = {
       web() {
         const name = colorObj ? colorObj.web : ColorExpression.getColorName_(colorHex);
         if (!name) {
-          return ColorExpression.get(colorHex, alphaNum, useParentheses).color();
+          return ColorExpression.get(colorHex, colorObj, alphaNum, useParentheses).color();
         }
         return name;
       },
